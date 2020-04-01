@@ -12,6 +12,7 @@
     "http-errors": "~1.6.3",
     "ejs": "~3.0.1",
     "morgan": "~1.9.1",
-    "chart.js": "~2.9.3"
+    "chart.js": "~2.9.3",
+    "mongodb": "~3.5"
   }
 }

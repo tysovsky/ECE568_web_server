@@ -4,18 +4,20 @@ var db = require('../database.js');
 
 //Return all data stored in the database
 router.get('/stock', function(req, res, next) {
-    db.getDataForAllTickers(function(data){
-        res.json(data)
-    })
+
+    db.getDataForAllTickers()
+        .then(data => res.json(data))
+        .catch(err => res.json({error: err}))
+
 });
 
 //Return all data for the particular ticker
 router.get('/stock/:ticker', function(req, res, next) {
     ticker = req.params.ticker
 
-    db.getDataForTicker(ticker, function(data){
-        res.json(data)
-    })
+    db.getDataForTicker(ticker)
+        .then(data => res.json(data))
+        .catch(err => res.json({error: err}))
     
 });
 
