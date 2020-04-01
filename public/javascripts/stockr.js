@@ -27,7 +27,8 @@
             label: 'Stock price ($)',
             data: stock_data["GOOGL.MI"].price,
             borderColor: "#4285f4",
-            backgroundColor: '#FBBC05A0'
+            backgroundColor: '#FBBC05A0',
+            pointRadius: 0
         }]
     }
 
@@ -37,7 +38,8 @@
             label: 'Stock price ($)',
             data: stock_data["TWTR"].price,
             borderColor: "#29487D",
-            backgroundColor: '#FEFEFEA0'
+            backgroundColor: '#FEFEFEA0',
+            pointRadius: 0
         }]
 }
 
@@ -47,7 +49,8 @@
                 label: 'Stock price ($)',
                 data: stock_data["UBER"].price,
                 borderColor: "#161626",
-                backgroundColor: '#C0C0C8A0'
+                backgroundColor: '#C0C0C8A0',
+                pointRadius: 0
             }]
     }
 
