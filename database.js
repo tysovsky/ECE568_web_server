@@ -16,6 +16,7 @@ exports.getDataForAllTickers =  function(){
 
             db.collection(historicalStockCollection)
                 .find()
+                .sort({"date": 1})
                 .toArray()
                 .then((stock_data) => resolve(stock_data))
                 .catch((err) => reject(err))
@@ -34,6 +35,7 @@ exports.getDataForTicker = function(ticker){
 
             db.collection(historicalStockCollection)
                 .find({"symbol":ticker})
+                .sort({"date": 1})
                 .toArray()
                 .then((stocks) => resolve(stocks))
                 .catch((err) => reject(err))

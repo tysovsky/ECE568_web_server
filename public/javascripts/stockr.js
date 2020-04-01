@@ -1,32 +1,51 @@
 (function($) {
     var data_json = JSON.parse(data);
 
+    var stock_data = {
+        "GOOGL.MI": {"date": [], "price": []},
+        "SNAP": {"date": [], "price": []},
+        "UBER": {"date": [], "price": []},
+        "TWTR": {"date": [], "price": []},
+        "PINS": {"date": [], "price": []},
+        "MSFT.MI": {"date": [], "price": []},
+        "COF": {"date": [], "price": []},
+        "WMT": {"date": [], "price": []},
+        "TM": {"date": [], "price": []},
+        "GM": {"date": [], "price": []}
+
+    }
+
+    for (var i = 0; i < data_json.length; i++){
+        stock_data[data_json[i]["symbol"]].price.push(data_json[i]["close"])
+        stock_data[data_json[i]["symbol"]].date.push(data_json[i]["date"])
+    }
+
 
     var google_data = {
-        labels: data_json[0]['labels'],
+        labels: stock_data["GOOGL.MI"].date,
         datasets: [{
             label: 'Stock price ($)',
-            data: data_json[0]['data'],
+            data: stock_data["GOOGL.MI"].price,
             borderColor: "#4285f4",
             backgroundColor: '#FBBC05A0'
         }]
     }
 
-    var facebook_data = {
-        labels: data_json[1]['labels'],
+    var twitter_data = {
+        labels: stock_data["TWTR"].date,
         datasets: [{
             label: 'Stock price ($)',
-            data: data_json[1]['data'],
+            data: stock_data["TWTR"].price,
             borderColor: "#29487D",
             backgroundColor: '#FEFEFEA0'
         }]
 }
 
     var uber_data = {
-            labels: data_json[2]['labels'],
+            labels: stock_data["UBER"].date,
             datasets: [{
                 label: 'Stock price ($)',
-                data: data_json[2]['data'],
+                data: stock_data["UBER"].price,
                 borderColor: "#161626",
                 backgroundColor: '#C0C0C8A0'
             }]
@@ -48,13 +67,13 @@
     }
 
     var google_chart = $("#google_chart")
-    var facebook_chart = $("#facebook_chart")
+    var twitter_chart = $("#twitter_chart")
     var uber_chart = $("#uber_chart")
     
 
     var btns = [
         $("#btn_google"),
-        $("#btn_facebook"),
+        $("#btn_twitter"),
         $("#btn_uber")
     ]
 
@@ -83,18 +102,18 @@
 
                     break
 
-                case 'btn_facebook':
+                case 'btn_twitter':
                     $(".currently_shown").hide()
                     $(".currently_shown").removeClass('currently_shown')
 
-                    $("#facebook").show()
-                    $("#facebook").addClass('currently_shown')
+                    $("#twitter").show()
+                    $("#twitter").addClass('currently_shown')
 
                     
 
-                    new Chart(facebook_chart, {
+                    new Chart(twitter_chart, {
                         type: 'line',
-                        data: facebook_data,
+                        data: twitter_data,
                         options: chart_options
                     })
                     break
