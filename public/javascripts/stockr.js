@@ -64,6 +64,13 @@
                     // OR //
                     beginAtZero: true   // minimum value will be 0.
                 }
+            }],
+            xAxes: [{
+                ticks: {
+                    callback: function(tick, index, array) {
+                        return (!(index % 3) || index == array.length - 1)? tick : "";
+                    }
+                }
             }]
         },
         responsive: true
