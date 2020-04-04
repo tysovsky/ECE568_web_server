@@ -4,9 +4,7 @@ var db = require('../database.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  db.getDataForAllTickers()
-      .then((data) => res.render('index', {data: data}))
-      .catch((err) => res.render('index', {data: []  }))
+  res.render('index', {data: []})
 });
 
 module.exports = router;

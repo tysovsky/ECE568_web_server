@@ -25,7 +25,7 @@ exports.getDataForAllTickers =  function(){
     })
 }
 
-exports.getDataForTicker = function(ticker){
+exports.getDataForTicker = function(ticker, from = null, to = null){
     return new Promise(function(resolve, reject) {
         MongoClient.connect(dbURL, (err, client) => {
             
@@ -33,8 +33,19 @@ exports.getDataForTicker = function(ticker){
 
             var db = client.db(dbName);
 
+            var find_clause = {'symbol': ticker}
+            var date_clause = {}
+            
+            if (from != null && from.length > 0)
+                date_clause['$gte'] = from
+            if (to != null && to.length > 0)
+                date_clause['$lte'] = to
+            
+            if ((from != null && from.length > 0) || (to != null && to.length > 0))
+                find_clause['date'] = date_clause
+
             db.collection(historicalStockCollection)
-                .find({"symbol":ticker})
+                .find(find_clause)
                 .sort({"date": 1})
                 .toArray()
                 .then((stocks) => resolve(stocks))
