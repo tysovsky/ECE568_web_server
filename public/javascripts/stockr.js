@@ -178,7 +178,18 @@
                 }
             }]
         },
-        responsive: true
+        responsive: true,
+        tooltips: {
+            mode: 'index',
+            intersect: false,
+        },
+        hover: {
+            mode: 'index',
+            intersect: false
+        },
+        animation:{
+            easing: "easeOutQuart"
+        }
     }
 
     var getData = function(ticker, from, to){
@@ -206,11 +217,16 @@
             ticker_panel_map[ticker].addClass('currently_shown')
         }
 
-        new Chart(stock_data[ticker].chart, {
+        if (stock_data[ticker].chart_obj)
+            stock_data[ticker].chart_obj.destroy()
+        
+        stock_data[ticker].chart_obj = new Chart(stock_data[ticker].chart, {
             type: 'line',
             data: stock_data[ticker],
             options: chart_options
         })
+        
+        
 
         activeTicker = ticker;
     }
