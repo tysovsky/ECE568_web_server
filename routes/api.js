@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../database.js');
+var path = require('path');
+var spawn = require("child_process").spawn; 
 
 //Return all data stored in the database
 router.get('/stock', function(req, res, next) {
@@ -51,6 +53,33 @@ router.get('/stock/:ticker/:date', function(req, res, next) {
     }
 
     res.json(example_json)
+});
+
+router.post('/predict/:ticker', function(req, res, next) {
+
+
+    var ticker = req.params.ticker;
+    var num_days = req.body.days;
+
+    console.log(path.resolve(__dirname));
+
+    var child = spawn('python3', 
+        [path.resolve(__dirname) + "/../scripts/predict.py", 
+        "--ticker", ticker, 
+        "--days", num_days]
+    );
+
+    child.stdout.on('data', function(data) {
+        var arr = data.toString().split('\n');
+
+        if(arr[0] == 'ERROR'){
+            res.json({status: "error", message: arr[1]});
+        }
+        else{
+            res.json({status: "success", predictions: arr.slice(1, arr.length-1)});
+        }
+    });
+
 });
 
 module.exports = router;

@@ -9,6 +9,12 @@
                 borderColor: "#4285f4",
                 backgroundColor: '#FBBC05A0',
                 pointRadius: 0
+            },
+            {
+                label: 'Predicted Stock Price ($)',
+                data: [],
+                borderColor: "#FF0000",
+                pointRadius: 0
             }]
         },
         "SNAP": {
@@ -19,6 +25,12 @@
                 data: [],
                 borderColor: "#FFFC00",
                 backgroundColor: '#000000A0',
+                pointRadius: 0
+            },
+            {
+                label: 'Predicted Stock Price ($)',
+                data: [],
+                borderColor: "#FF0000",
                 pointRadius: 0
             }]
         },
@@ -31,6 +43,12 @@
                 borderColor: "#161626",
                 backgroundColor: '#C0C0C8A0',
                 pointRadius: 0
+            },
+            {
+                label: 'Predicted Stock Price ($)',
+                data: [],
+                borderColor: "#FF0000",
+                pointRadius: 0
             }]
         },
         "TWTR": {
@@ -41,6 +59,12 @@
                 data: [],
                 borderColor: "#1DA1F2",
                 backgroundColor: '#FEFEFEA0',
+                pointRadius: 0
+            },
+            {
+                label: 'Predicted Stock Price ($)',
+                data: [],
+                borderColor: "#FF0000",
                 pointRadius: 0
             }]
         },
@@ -53,6 +77,12 @@
                 borderColor: "#E60023",
                 backgroundColor: '#FEFEFEA0',
                 pointRadius: 0
+            },
+            {
+                label: 'Predicted Stock Price ($)',
+                data: [],
+                borderColor: "#FF0000",
+                pointRadius: 0
             }]
         },
         "MSFT.MI": {
@@ -63,6 +93,12 @@
                 data: [],
                 borderColor: "#7FBA00",
                 backgroundColor: '#F25022A0',
+                pointRadius: 0
+            },
+            {
+                label: 'Predicted Stock Price ($)',
+                data: [],
+                borderColor: "#FF0000",
                 pointRadius: 0
             }]
         },
@@ -75,6 +111,12 @@
                 borderColor: "#D22E1E",
                 backgroundColor: '#004879A0',
                 pointRadius: 0
+            },
+            {
+                label: 'Predicted Stock Price ($)',
+                data: [],
+                borderColor: "#FF0000",
+                pointRadius: 0
             }]
         },
         "WMT": {
@@ -85,6 +127,12 @@
                 data: [],
                 borderColor: "#004c91 ",
                 backgroundColor: '#78b9e7A0',
+                pointRadius: 0
+            },
+            {
+                label: 'Predicted Stock Price ($)',
+                data: [],
+                borderColor: "#FF0000",
                 pointRadius: 0
             }]
         },
@@ -97,6 +145,12 @@
                 borderColor: "#572d2c ",
                 backgroundColor: '#f38698A0',
                 pointRadius: 0
+            },
+            {
+                label: 'Predicted Stock Price ($)',
+                data: [],
+                borderColor: "#FF0000",
+                pointRadius: 0
             }]
         },
         "GM": {
@@ -107,6 +161,12 @@
                 data: [],
                 borderColor: "#572d2c ",
                 backgroundColor: '#f38698A0',
+                pointRadius: 0
+            },
+            {
+                label: 'Predicted Stock Price ($)',
+                data: [],
+                borderColor: "#FF0000",
                 pointRadius: 0
             }]
         }
@@ -192,6 +252,40 @@
         }
     }
 
+    var getPredictionData = function(ticker, days){
+        $.post("/api/predict/" + ticker, {"days": days}, function(data, status){
+
+            if(data.status == 'success'){
+                
+                historical_data = stock_data[ticker].datasets[0].data;
+                predicted_data = stock_data[ticker].datasets[1].data;
+
+                predicted_data.length = 0
+                
+                for(var i = 0; i < historical_data.length-1; i++){
+                    predicted_data.push(NaN)
+                }
+
+                predicted_data.push(historical_data[historical_data.length - 1])
+
+                last_date = new Date(stock_data[ticker].labels[stock_data[ticker].labels.length-1])
+
+                for(var i = 0; i < data.predictions.length; i++){
+                    predicted_data.push(data.predictions[i])
+                    stock_data[ticker].datasets[0].data.push(NaN)
+
+                    last_date.setDate(last_date.getDate() + 1);
+
+                    stock_data[ticker].labels.push(last_date.toISOString().substring(0, 10))
+                }
+
+                showChart(ticker);
+            }
+            
+
+          });
+    }
+
     var getData = function(ticker, from, to){
         $.post("/api/stock/" + ticker, {"from": from, "to": to}, function(data, status){
 
@@ -203,7 +297,7 @@
                 stock_data[ticker].labels.push(data[i]["date"])
             }
 
-            showChart(ticker);
+            //showChart(ticker);
 
           });
     }
@@ -278,6 +372,8 @@
             else{
                 getData(ticker, from, to);
             }
+
+            getPredictionData(ticker, 5);
         
         });
     }
@@ -319,10 +415,12 @@
             }
 
             getData(activeTicker, from, to);
+            getPredictionData(activeTicker, 5);
         });
     }
 
 
     getData(activeTicker, getFrom(activeRange), new Date().toISOString().substring(0, 10), );
+    getPredictionData(activeTicker, 5);
 
 })(jQuery);
