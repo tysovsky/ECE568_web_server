@@ -1,6 +1,6 @@
 (function($) {
     var stock_data = {
-        "GOOGL.MI": {
+        "GOOG": {
             chart: $("#google_chart"),
             labels: [],
             datasets: [{
@@ -85,7 +85,7 @@
                 pointRadius: 0
             }]
         },
-        "MSFT.MI": {
+        "MSFT": {
             chart: $("#microsoft_chart"),
             labels: [],
             datasets: [{
@@ -194,31 +194,31 @@
     ]
 
     var btn_ticker_map = {
-        "btn_google": "GOOGL.MI",
+        "btn_google": "GOOG",
         "btn_twitter": "TWTR",
         "btn_uber": "UBER",
         "btn_snap": "SNAP",
         "btn_pinterest": "PINS",
-        "btn_microsoft": "MSFT.MI",
+        "btn_microsoft": "MSFT",
         "btn_capitalone": "COF",
         "btn_wallmart": "WMT",
         "btn_toyota": "TM"
     }
 
     var ticker_panel_map = {
-        "GOOGL.MI": $('#google'),
+        "GOOG": $('#google'),
         "TWTR": $('#twitter'),
         "UBER": $('#uber'),
         "SNAP": $('#snap'),
         "PINS": $('#pinterest'),
-        "MSFT.MI": $('#microsoft'),
+        "MSFT": $('#microsoft'),
         "COF": $('#capitalone'),
         "WMT": $('#wallmart'),
         "TM": $('#toyota')
     }
 
-    var activeTicker = 'GOOGL.MI'
-    var activeRange = 'one_year'
+    var activeTicker = 'GOOG'
+    var activeRange = 'six_months'
     var chart_options = {
         maintainAspectRatio: false,
         scales: {
