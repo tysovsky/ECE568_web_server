@@ -32,11 +32,15 @@ def importValues(ticker):
 
     close = []
 
-    for x in stocks_collection.find({"symbol": ticker}).sort("date", pymongo.DESCENDING):
-        close.append(float(x['close']))
+    try:
+        for x in stocks_collection.find({"symbol": ticker}).sort("date", pymongo.DESCENDING):
+            close.append(float(x['close']))
 
-        if len(close) == 100:
-            break
+            if len(close) == 100:
+                break
+    except Exception as e:
+        print('ERROR')
+        print(e)
     
     
     close.reverse()

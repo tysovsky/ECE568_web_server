@@ -314,7 +314,7 @@
                         stock_data[ticker].labels.push(data[i]["date"])
                     }
     
-                    showChart(activeTicker);
+                    showChart(ticker);
                 }
 
             });
