@@ -23,6 +23,19 @@ router.get('/stock/:ticker', function(req, res, next) {
     
 });
 
+router.get('/stock/:ticker/realtime', function(req, res, next) {
+    ticker = req.params.ticker
+
+    db.getRealTimeDataForTicker(ticker)
+        .then(function(data){
+            res.json(data);
+        })
+        .catch(function(err){
+            res.json({error: err});
+        })
+    
+});
+
 router.post('/stock/:ticker', function(req, res, next) {
     var ticker = req.params.ticker;
     var from = req.body.from;

@@ -186,6 +186,7 @@
     ]
 
     var range_btns = [
+        $("#btn_range_real_time"),
         $("#btn_range_one_week"),
         $("#btn_range_six_months"),
         $("#btn_range_one_year"),
@@ -286,20 +287,51 @@
           });
     }
 
-    var getData = function(ticker, from, to){
-        $.post("/api/stock/" + ticker, {"from": from, "to": to}, function(data, status){
+    var getData = function(ticker, from, to, update_real_time = false){
+        if(activeRange == 'real_time'){
+            $.get("/api/stock/" + ticker + "/realtime", function(data, status){
 
-            stock_data[ticker].datasets[0].data = []
-            stock_data[ticker].labels = []
+                if(update_real_time){
+                    if(data.length > 0){
+                        var new_label = data[data.length-1]['date']
 
-            for(var i = 0; i < data.length; i++){
-                stock_data[ticker].datasets[0].data.push(data[i]["close"])
-                stock_data[ticker].labels.push(data[i]["date"])
-            }
+                        if (new_label != stock_data[ticker].labels[stock_data[ticker].labels.length - 1])
+                        {
+                            stock_data[ticker].labels.push(new_label)
+                            stock_data[ticker].datasets[0].data.push(data[data.length-1]['close'])
+                        }
+                    }
 
-            //showChart(ticker);
+                    stock_data[ticker].chart_obj.update();
+                }
+                else{
+                    stock_data[ticker].datasets[0].data = []
+                    stock_data[ticker].datasets[1].data = []
+                    stock_data[ticker].labels = []
+    
+                    for(var i = 0; i < data.length; i++){
+                        stock_data[ticker].datasets[0].data.push(data[i]["close"])
+                        stock_data[ticker].labels.push(data[i]["date"])
+                    }
+    
+                    showChart(activeTicker);
+                }
 
-          });
+            });
+        }
+        else{
+            $.post("/api/stock/" + ticker, {"from": from, "to": to}, function(data, status){
+
+                stock_data[ticker].datasets[0].data = []
+                stock_data[ticker].labels = []
+
+                for(var i = 0; i < data.length; i++){
+                    stock_data[ticker].datasets[0].data.push(data[i]["close"])
+                    stock_data[ticker].labels.push(data[i]["date"])
+                }
+
+            });
+        }
     }
 
     var showChart = function(ticker){
@@ -373,7 +405,8 @@
                 getData(ticker, from, to);
             }
 
-            getPredictionData(ticker, 5);
+            if(activeRange != 'real_time')
+                getPredictionData(ticker, 5);
         
         });
     }
@@ -389,6 +422,12 @@
             var from = null;
 
             switch($(this).attr('id')){
+                case 'btn_range_real_time':
+                    activeRange = 'real_time'
+                    from = null;
+                    to = null;
+                    break;
+
                 case 'btn_range_one_week':
                     activeRange = 'one_week'       
                     from = getFrom(activeRange)
@@ -415,12 +454,19 @@
             }
 
             getData(activeTicker, from, to);
-            getPredictionData(activeTicker, 5);
+            if(activeRange != 'real_time')
+                getPredictionData(activeTicker, 5);
         });
     }
 
 
     getData(activeTicker, getFrom(activeRange), new Date().toISOString().substring(0, 10), );
     getPredictionData(activeTicker, 5);
+
+    setInterval(function() {
+        if(activeRange == 'real_time'){
+            getData(activeTicker, null, null, true);
+        }
+    }, 60 * 1000); // 60 * 1000 milsec
 
 })(jQuery);
