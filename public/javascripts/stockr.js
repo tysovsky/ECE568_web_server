@@ -53,7 +53,7 @@
             chart: $("#toyota_chart")
         },
         "GM": {
-            chart: $("#google_chart")
+            chart: $("#gm_chart")
         }
 
     }  
@@ -67,7 +67,8 @@
         $("#btn_microsoft"),
         $("#btn_capitalone"),
         $("#btn_wallmart"),
-        $("#btn_toyota")
+        $("#btn_toyota"),
+        $("#btn_gm")
     ]
 
     var range_btns = [
@@ -88,7 +89,8 @@
         "btn_microsoft": "MSFT",
         "btn_capitalone": "COF",
         "btn_wallmart": "WMT",
-        "btn_toyota": "TM"
+        "btn_toyota": "TM",
+        "btn_gm": "GM"
     }
 
     var ticker_panel_map = {
@@ -100,7 +102,8 @@
         "MSFT": $('#microsoft'),
         "COF": $('#capitalone'),
         "WMT": $('#wallmart'),
-        "TM": $('#toyota')
+        "TM": $('#toyota'),
+        "GM": $('#gm')
     }
 
     var activeTicker = 'GOOG'
@@ -313,6 +316,9 @@
     }
 
     var showChart = function(ticker, data){
+
+        $("#query_link").attr("href", "/query/" + ticker)
+
         if(ticker != activeTicker){
             $(".currently_shown").hide()
             $(".currently_shown").removeClass('currently_shown')

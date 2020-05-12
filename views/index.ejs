@@ -5,8 +5,8 @@
 		<title>Stockr</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="stylesheets/main.css" />
-		<noscript><link rel="stylesheet" href="stylesheets/noscript.css" /></noscript>
+		<link rel="stylesheet" href="/stylesheets/main.css" />
+		<noscript><link rel="stylesheet" href="/stylesheets/noscript.css" /></noscript>
 	</head>
 	<body class="is-preload">
 
@@ -28,6 +28,7 @@
 							<li><a id = "btn_capitalone">Capital One</a></li>
 							<li><a id = "btn_wallmart">Wallmart</a></li>
 							<li><a id = "btn_toyota">Toyota</a></li>
+							<li><a id = "btn_gm">GM</a></li>
 						</ul>
 					</nav>
 
@@ -226,6 +227,27 @@
 									</div>
 								</div>
 							</section>
+
+							<section id="gm" class="main" style="display: none;">
+								<div class="spotlight">
+									<div class="content">
+										<header class="major">
+											<h2>General Motors</h2>
+											<ul style="list-style-type: none; margin: 0; padding: 0; overflow: hidden; height: 27px;
+											display: flex; justify-content: space-between; width: 100%; align-items: stretch">
+												<li style="float: left; margin-right: 30px;"><p style="font-size: 1em;">10 day highest: $<%= stats.GM.highest %> </p></li>
+												<li style="float: left; margin-right: 30px;"><p style="font-size: 1em;">Yearly average: $<%= stats.GM.average %></p></li>
+												<li style="float: left; margin-right: 30px;"><p style="font-size: 1em;">Yearly lowest: $<%= stats.GM.lowest %></p></li>
+									   		</ul>
+										</header>
+										<div>
+											<canvas id="gm_chart" width="400" height="400" style="height: 400px; width: 100%"></canvas>
+										</div>
+									</div>
+								</div>
+							</section>
+
+							<a id = "query_link" style="margin-left: 30px;" href="/query/GOOG">List of companies with average yearly price lower than this company's lowest price.</a>
 					</div>
 
 	
@@ -234,10 +256,6 @@
 				<%- include('../partials/footer') %>
 
 			</div>
-
-			<script>
-				var data = '<%- JSON.stringify(data) %>'         
-			 </script>
 
 		<!-- Scripts -->
 			<script src="javascripts/jquery.min.js"></script>

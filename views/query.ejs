@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+    <title>Query - <%= company_data.ticker %></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="/stylesheets/main.css" />
+    <script src="https://kit.fontawesome.com/f454c7221e.js" crossorigin="anonymous"></script>
+    <noscript><link rel="stylesheet" href="/stylesheets/noscript.css" /></noscript>
+</head>
+
+<body>
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        <!-- Header -->
+        <%- include('../partials/header') %>
+
+        <!-- Main -->
+        <div id="main">
+            <section id="first" class="main special">
+                <header class="major">
+                    <h2>List of companies whose average yearly price is less than <%= company_data.name %>'s lowest yearly price ($<%= company_data.lowest %>)</h2>
+                </header>
+                <ul class="features">
+
+                    <% for (var i = 0; i < companies.length; i++ ) { %>
+                        <li>
+                            <span class="icon solid style1"><img src="/images/<%= companies[i].ticker %>.svg" style="width: 100px; height: 100px;" alt="" /></span>
+                            <h3><%= companies[i].name %> | <%= companies[i].ticker %></h3>
+                            <p>Average Yearly Price: $<%= companies[i].average %></p>
+                        </li>
+                    <% } %>
+
+                </ul>
+            </section>
+
+
+        </div>
+
+
+
+        <!-- Footer -->
+        <%- include('../partials/footer') %>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="/javascripts/jquery.min.js"></script>
+    <script src="/javascripts/jquery.scrollex.min.js"></script>
+    <script src="/javascripts/jquery.scrolly.min.js"></script>
+    <script src="/javascripts/browser.min.js"></script>
+    <script src="/javascripts/breakpoints.min.js"></script>
+    <script src="/javascripts/util.js"></script>
+    <script src="/javascripts/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.bundle.min.js"></script>
+    <script src="/javascripts/stockr.js"></script>
+
+</body>
+
+</html>

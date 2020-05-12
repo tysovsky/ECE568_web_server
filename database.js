@@ -306,3 +306,83 @@ exports.getStats = function(ticker){
         });
     })
 }
+
+exports.getAllStats = function(){
+
+    return new Promise(function(resolve, reject) {
+        stock_data = {}
+        exports.getStats('GOOG').then(function(s){
+    
+            stock_data['GOOG'] = s;
+        
+            exports.getStats('TWTR')
+            .then(function(s){
+              stock_data['TWTR'] = s;
+        
+              exports.getStats('UBER')
+              .then(function(s){
+                stock_data['UBER'] = s;
+        
+                exports.getStats('SNAP')
+                .then(function(s){
+                  stock_data['SNAP'] = s;
+        
+                  exports.getStats('PINS')
+                  .then(function(s){
+                    stock_data['PINS'] = s;
+        
+                    exports.getStats('MSFT')
+                    .then(function(s){
+                      stock_data['MSFT'] = s;
+        
+                      exports.getStats('COF')
+                      .then(function(s){
+                        stock_data['COF'] = s;
+        
+                        exports.getStats('WMT')
+                        .then(function(s){
+                          stock_data['WMT'] = s;
+        
+                          exports.getStats('GM')
+                          .then(function(s){
+                            stock_data['GM'] = s;
+        
+                            exports.getStats('TM')
+                            .then(function(s){
+                              stock_data['TM'] = s;
+        
+                                resolve(stock_data);
+        
+                            })
+                            .catch((err) => reject(err))
+        
+                          })
+                          .catch((err) =>  reject(err))
+        
+                        })
+                        .catch((err) =>  reject(err))
+        
+                      })
+                      .catch((err) =>  reject(err))
+        
+                    })
+                    .catch((err) => reject(err))
+        
+                  })
+                  .catch((err) => reject(err))
+        
+                })
+                .catch((err) => reject(err))
+        
+              })
+              .catch((err) => reject(err))
+        
+            })
+            .catch((err) => reject(err))
+          })
+          .catch((err) => reject(err))
+    })
+
+
+
+}
