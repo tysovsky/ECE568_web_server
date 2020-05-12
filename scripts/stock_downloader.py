@@ -41,8 +41,17 @@ seconds_slept = 0
 av_api = AlphaVantage(get_av_api_key())
 
 #when the script is first run, empty all tables and get historical data
-stock_historical_collection.delete_many({})
-stock_realtime_collection.delete_many({})
+stock_historical_collection.drop()
+stock_realtime_collection.drop()
+
+stock_historical_collection.create_index(
+    [("date", pymongo.ASCENDING), ("symbol", pymongo.ASCENDING)],
+    unique=True)
+
+stock_realtime_collection.create_index(
+    [("date", pymongo.ASCENDING), ("symbol", pymongo.ASCENDING)],
+    unique=True)
+
 
 print('Getting historical data')
 

@@ -1,174 +1,59 @@
 (function($) {
+
+    function onChartLegendClicked(e, legendItem){
+        var index = legendItem.datasetIndex;
+        
+        switch(index){
+            case 0:
+                stock_hidden = !stock_hidden;
+                break;
+            case 1:
+                prediction_hidden = !prediction_hidden;
+                break;
+            case 2:
+                sma_hidden = !sma_hidden;
+                break;
+            case 3:
+                cci_hidden = !cci_hidden;
+                break;
+            case 4:
+                mfi_hidden = !mfi_hidden;
+                break;
+        }
+
+        Chart.defaults.global.legend.onClick.call(this, e, legendItem);
+    }
+
     var stock_data = {
         "GOOG": {
-            chart: $("#google_chart"),
-            labels: [],
-            datasets: [{
-                label: 'Stock price ($)',
-                data: [],
-                borderColor: "#4285f4",
-                backgroundColor: '#FBBC05A0',
-                pointRadius: 0
-            },
-            {
-                label: 'Predicted Stock Price ($)',
-                data: [],
-                borderColor: "#FF0000",
-                pointRadius: 0
-            }]
+            chart: $("#google_chart")
         },
         "SNAP": {
-            chart: $("#snap_chart"),
-            labels: [],
-            datasets: [{
-                label: 'Stock price ($)',
-                data: [],
-                borderColor: "#FFFC00",
-                backgroundColor: '#000000A0',
-                pointRadius: 0
-            },
-            {
-                label: 'Predicted Stock Price ($)',
-                data: [],
-                borderColor: "#FF0000",
-                pointRadius: 0
-            }]
+            chart: $("#snap_chart")
         },
         "UBER": {
-            chart: $("#uber_chart"),
-            labels: [],
-            datasets: [{
-                label: 'Stock price ($)',
-                data: [],
-                borderColor: "#161626",
-                backgroundColor: '#C0C0C8A0',
-                pointRadius: 0
-            },
-            {
-                label: 'Predicted Stock Price ($)',
-                data: [],
-                borderColor: "#FF0000",
-                pointRadius: 0
-            }]
+            chart: $("#uber_chart")
         },
         "TWTR": {
-            chart: $("#twitter_chart"),
-            labels: [],
-            datasets: [{
-                label: 'Stock price ($)',
-                data: [],
-                borderColor: "#1DA1F2",
-                backgroundColor: '#FEFEFEA0',
-                pointRadius: 0
-            },
-            {
-                label: 'Predicted Stock Price ($)',
-                data: [],
-                borderColor: "#FF0000",
-                pointRadius: 0
-            }]
+            chart: $("#twitter_chart")
         },
         "PINS": {
-            chart: $("#pinterest_chart"),
-            labels: [],
-            datasets: [{
-                label: 'Stock price ($)',
-                data: [],
-                borderColor: "#E60023",
-                backgroundColor: '#FEFEFEA0',
-                pointRadius: 0
-            },
-            {
-                label: 'Predicted Stock Price ($)',
-                data: [],
-                borderColor: "#FF0000",
-                pointRadius: 0
-            }]
+            chart: $("#pinterest_chart")
         },
         "MSFT": {
-            chart: $("#microsoft_chart"),
-            labels: [],
-            datasets: [{
-                label: 'Stock price ($)',
-                data: [],
-                borderColor: "#7FBA00",
-                backgroundColor: '#F25022A0',
-                pointRadius: 0
-            },
-            {
-                label: 'Predicted Stock Price ($)',
-                data: [],
-                borderColor: "#FF0000",
-                pointRadius: 0
-            }]
+            chart: $("#microsoft_chart")
         },
         "COF": {
-            chart: $("#capitalone_chart"),
-            labels: [],
-            datasets: [{
-                label: 'Stock price ($)',
-                data: [],
-                borderColor: "#D22E1E",
-                backgroundColor: '#004879A0',
-                pointRadius: 0
-            },
-            {
-                label: 'Predicted Stock Price ($)',
-                data: [],
-                borderColor: "#FF0000",
-                pointRadius: 0
-            }]
+            chart: $("#capitalone_chart")
         },
         "WMT": {
-            chart: $("#wallmart_chart"),
-            labels: [],
-            datasets: [{
-                label: 'Stock price ($)',
-                data: [],
-                borderColor: "#004c91 ",
-                backgroundColor: '#78b9e7A0',
-                pointRadius: 0
-            },
-            {
-                label: 'Predicted Stock Price ($)',
-                data: [],
-                borderColor: "#FF0000",
-                pointRadius: 0
-            }]
+            chart: $("#wallmart_chart")
         },
         "TM": {
-            chart: $("#toyota_chart"),
-            labels: [],
-            datasets: [{
-                label: 'Stock price ($)',
-                data: [],
-                borderColor: "#572d2c ",
-                backgroundColor: '#f38698A0',
-                pointRadius: 0
-            },
-            {
-                label: 'Predicted Stock Price ($)',
-                data: [],
-                borderColor: "#FF0000",
-                pointRadius: 0
-            }]
+            chart: $("#toyota_chart")
         },
         "GM": {
-            chart: $("#google_chart"),
-            labels: [],
-            datasets: [{
-                label: 'Stock price ($)',
-                data: [],
-                borderColor: "#572d2c ",
-                backgroundColor: '#f38698A0',
-                pointRadius: 0
-            },
-            {
-                label: 'Predicted Stock Price ($)',
-                data: [],
-                borderColor: "#FF0000",
-                pointRadius: 0
-            }]
+            chart: $("#google_chart")
         }
 
     }  
@@ -219,18 +104,35 @@
     }
 
     var activeTicker = 'GOOG'
+    var stock_hidden = false;
+    var prediction_hidden = false;
+    var sma_hidden = true;
+    var cci_hidden = true;
+    var mfi_hidden = true;
+
     var activeRange = 'six_months'
     var chart_options = {
         maintainAspectRatio: false,
         scales: {
-            yAxes: [{
-                display: true,
-                ticks: {
-                    suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
-                    // OR //
-                    beginAtZero: true   // minimum value will be 0.
-                }
-            }],
+            yAxes: [
+                {
+                    id: 'A',
+                    display: true,
+                    position: 'left',
+                    ticks: {
+                        suggestedMin: 0
+                    }
+                 },
+                 {
+                    id: 'B',
+                    display: true,
+                    position: 'right',
+                    ticks: {
+                        suggestedMin: -250,
+                        suggestedMax: 250
+                    }
+                }  
+            ],
             xAxes: [{
                 ticks: {
                     callback: function(tick, index, array) {
@@ -250,91 +152,167 @@
         },
         animation:{
             easing: "easeOutQuart"
+        },
+        legend: {
+            onClick: onChartLegendClicked
         }
     }
 
-    var getPredictionData = function(ticker, days){
-        $.post("/api/predict/" + ticker, {"days": days}, function(data, status){
+    var getAll = function(ticker, from, to, prediction_days, indicator_range){
 
-            if(data.status == 'success'){
-                
-                historical_data = stock_data[ticker].datasets[0].data;
-                predicted_data = stock_data[ticker].datasets[1].data;
-
-                predicted_data.length = 0
-                
-                for(var i = 0; i < historical_data.length-1; i++){
-                    predicted_data.push(NaN)
-                }
-
-                predicted_data.push(historical_data[historical_data.length - 1])
-
-                last_date = new Date(stock_data[ticker].labels[stock_data[ticker].labels.length-1])
-
-                for(var i = 0; i < data.predictions.length; i++){
-                    predicted_data.push(data.predictions[i])
-                    stock_data[ticker].datasets[0].data.push(NaN)
-
-                    last_date.setDate(last_date.getDate() + 1);
-
-                    stock_data[ticker].labels.push(last_date.toISOString().substring(0, 10))
-                }
-
-                showChart(ticker);
-            }
-            
-
-          });
-    }
-
-    var getData = function(ticker, from, to, update_real_time = false){
         if(activeRange == 'real_time'){
             $.get("/api/stock/" + ticker + "/realtime", function(data, status){
 
-                if(update_real_time){
-                    if(data.length > 0){
-                        var new_label = data[data.length-1]['date']
-
-                        if (new_label != stock_data[ticker].labels[stock_data[ticker].labels.length - 1])
-                        {
-                            stock_data[ticker].labels.push(new_label)
-                            stock_data[ticker].datasets[0].data.push(data[data.length-1]['close'])
-                        }
-                    }
-
-                    stock_data[ticker].chart_obj.update();
-                }
-                else{
-                    stock_data[ticker].datasets[0].data = []
-                    stock_data[ticker].datasets[1].data = []
-                    stock_data[ticker].labels = []
+                var labels = [];
+                var realtime_data = [];
     
-                    for(var i = 0; i < data.length; i++){
-                        stock_data[ticker].datasets[0].data.push(data[i]["close"])
-                        stock_data[ticker].labels.push(data[i]["date"])
-                    }
-    
-                    showChart(ticker);
+                for(var i = 0; i < data.length; i++){
+                    realtime_data.push(data[i]["close"])
+                    labels.push(data[i]["date"])
                 }
+
+                showChart(ticker,
+                    {
+                        'labels': labels,
+                        'datasets': [
+                            {
+                                label: 'Stock price ($)',
+                                'data': realtime_data,
+                                borderColor: "#424242",
+                                fill: false,
+                                yAxisID: 'A',
+                                pointRadius: 0
+                            }
+                        ]
+                    });
 
             });
         }
         else{
-            $.post("/api/stock/" + ticker, {"from": from, "to": to}, function(data, status){
 
-                stock_data[ticker].datasets[0].data = []
-                stock_data[ticker].labels = []
+            $.post("/api/stock/" + ticker + '/all', {"from": from, "to": to, "days": prediction_days, "range": indicator_range}, function(data, status){
 
-                for(var i = 0; i < data.length; i++){
-                    stock_data[ticker].datasets[0].data.push(data[i]["close"])
-                    stock_data[ticker].labels.push(data[i]["date"])
+                var historical_data = [];
+                var predicted_data = []
+                var sma_data = []
+                var cci_data = []
+                var mfi_data = []
+                var labels = []
+
+
+                //Stock
+
+                for(var i = 0; i < data.stock.length; i++){
+                    historical_data.push(data.stock[i]["close"])
+                    labels.push(data.stock[i]["date"])
                 }
+
+                
+                //Predicted
+                for(var i = 0; i < historical_data.length-1; i++){
+                    predicted_data.push(NaN);
+                }
+
+                predicted_data.push(historical_data[historical_data.length - 1])
+
+                last_date = new Date(labels[labels.length-1])
+
+                for(var i = 0; i < data.predictions.length; i++){
+                    predicted_data.push(data.predictions[i])
+                    historical_data.push(NaN)
+
+                    last_date.setDate(last_date.getDate() + 1);
+                    labels.push(last_date.toISOString().substring(0, 10))
+                }
+
+                //SMA
+                if(data.indicators.sma.length < data.stock.length){
+                    for(var i = 0; i < data.stock.length - data.indicators.sma.length; i++)
+                        sma_data.push(NaN);
+                }
+
+                for(var i = 0; i < data.indicators.sma.length; i++){
+                    sma_data.push(data.indicators.sma[i]);
+                }
+
+                //CCI
+                if(data.indicators.cci.length < data.stock.length){
+                    for(var i = 0; i < data.stock.length - data.indicators.cci.length; i++)
+                        cci_data.push(NaN);
+                }
+                for(var i = 0; i < data.indicators.cci.length; i++){
+                    cci_data.push(data.indicators.cci[i]);
+                }
+
+                //MFI
+                if(data.indicators.mfi.length < data.stock.length){
+                    for(var i = 0; i < data.stock.length - data.indicators.mfi.length; i++)
+                        mfi_data.push(NaN);
+                }
+
+                for(var i = 0; i < data.indicators.mfi.length; i++){
+                    mfi_data.push(data.indicators.mfi[i]);
+                }
+
+                showChart(ticker,
+                    {
+                        'labels': labels,
+                        'datasets': [
+                            {
+                                label: 'Stock price ($)',
+                                data: historical_data,
+                                borderColor: "#424242",
+                                fill: false,
+                                hidden: stock_hidden,
+                                yAxisID: 'A',
+                                pointRadius: 0
+                            },
+                            {
+                                label: 'Predicted Stock price ($)',
+                                data: predicted_data,
+                                borderColor: "#E60023",
+                                fill: false,
+                                hidden: prediction_hidden,
+                                yAxisID: 'A',
+                                pointRadius: 0
+                            },
+                            {
+                                label: 'Simple Running Average ($)',
+                                data: sma_data,
+                                borderColor: "#2e7d32",
+                                fill: false,
+                                pointRadius: 0,
+                                yAxisID: 'A',
+                                hidden: sma_hidden
+                            },
+                            {
+                                label: 'Commodity Channel Index',
+                                data: cci_data,
+                                borderColor: "#1565c0",
+                                fill: false,
+                                pointRadius: 0,
+                                yAxisID: 'B',
+                                hidden: cci_hidden
+                            },
+                            {
+                                label: 'Money Flow Index',
+                                data: mfi_data,
+                                borderColor: "#ff8f00",
+                                fill: false,
+                                pointRadius: 0,
+                                yAxisID: 'B',
+                                hidden: mfi_hidden
+                            },
+                            
+
+                        ]
+                    });
 
             });
         }
     }
 
-    var showChart = function(ticker){
+    var showChart = function(ticker, data){
         if(ticker != activeTicker){
             $(".currently_shown").hide()
             $(".currently_shown").removeClass('currently_shown')
@@ -347,13 +325,11 @@
             stock_data[ticker].chart_obj.destroy()
         
         stock_data[ticker].chart_obj = new Chart(stock_data[ticker].chart, {
-            type: 'line',
-            data: stock_data[ticker],
-            options: chart_options
+            'type': 'line',
+            'data': data,
+            'options': chart_options
         })
         
-        
-
         activeTicker = ticker;
     }
 
@@ -386,6 +362,7 @@
         }
     }
 
+
     for(var i = 0; i < btns.length; i++){
         btns[i].click(function(event){
 
@@ -396,17 +373,12 @@
             var ticker = btn_ticker_map[$(this).attr('id')];
             
             if(activeRange != null){
-                var to = new Date().toISOString().substring(0, 10);
-                var from = getFrom(activeRange);
-
-                getData(ticker, from, to);
-            }
-            else{
-                getData(ticker, from, to);
+                to = new Date().toISOString().substring(0, 10);
+                from = getFrom(activeRange);
             }
 
-            if(activeRange != 'real_time')
-                getPredictionData(ticker, 5);
+
+            getAll(ticker, from, to, 5, 10);
         
         });
     }
@@ -453,19 +425,20 @@
                     to = null;
             }
 
-            getData(activeTicker, from, to);
-            if(activeRange != 'real_time')
-                getPredictionData(activeTicker, 5);
+            getAll(activeTicker, from, to, 5, 10);
+
+            //getData(activeTicker, from, to);
+            //if(activeRange != 'real_time')
+                //getPredictionData(activeTicker, 5);
         });
     }
 
 
-    getData(activeTicker, getFrom(activeRange), new Date().toISOString().substring(0, 10), );
-    getPredictionData(activeTicker, 5);
+    getAll(activeTicker, getFrom(activeRange), new Date().toISOString().substring(0, 10), 5, 10);
 
     setInterval(function() {
         if(activeRange == 'real_time'){
-            getData(activeTicker, null, null, true);
+            getAll(activeTicker, getFrom(activeRange), new Date().toISOString().substring(0, 10), 5, 10);
         }
     }, 60 * 1000); // 60 * 1000 milsec
 
