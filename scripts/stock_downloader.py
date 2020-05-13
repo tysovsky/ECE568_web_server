@@ -14,7 +14,7 @@ containing the API key for Alpha Vintage
 
 def get_av_api_key():
     script_path = os.path.dirname(os.path.realpath(__file__))
-    with open(script_path + '/alpha_vintage.key', 'r') as f:
+    with open(script_path + '/alpha_vantage.key', 'r') as f:
         return f.readline()
 
 class AlphaVantage:
